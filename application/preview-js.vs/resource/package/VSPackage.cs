@@ -26,7 +26,7 @@ namespace resource.package
             public const string EXTENSION2 = ".TS";
             public const string GUID = "F88C6B0D-5C05-4400-A035-596ACD6922FA";
             public const string NAME = "Preview-JS";
-            public const string VERSION = "1.0.1";
+            public const string VERSION = "1.0.2";
         }
 
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
