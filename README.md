@@ -6,7 +6,7 @@
 ![Image](https://img.shields.io/badge/VS-2017-blueviolet)
 ![Image](https://img.shields.io/badge/VS-2015-blueviolet)
 
-### Now you can look inside JS file not opening it.
+### Now you can look inside [JS](https://en.wikipedia.org/wiki/JavaScript) and [TS](https://en.wikipedia.org/wiki/TypeScript) source files not opening it.
 ---
 
 ![Image](resource/video/Presentation1.gif)
