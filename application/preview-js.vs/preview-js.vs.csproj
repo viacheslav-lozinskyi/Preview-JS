@@ -86,6 +86,24 @@
       <Link>resource\document\LICENSE</Link>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Content Include="..\..\resource\sample\Sample1.js">
+      <Link>resource\sample\Sample1.js</Link>
+    </Content>
+    <Content Include="..\..\resource\sample\Sample2.js">
+      <Link>resource\sample\Sample2.js</Link>
+    </Content>
+    <Content Include="..\..\resource\sample\Sample3.js">
+      <Link>resource\sample\Sample3.js</Link>
+    </Content>
+    <Content Include="..\..\resource\sample\Sample1.ts">
+      <Link>resource\sample\Sample1.ts</Link>
+    </Content>
+    <Content Include="..\..\resource\sample\Sample2.ts">
+      <Link>resource\sample\Sample2.ts</Link>
+    </Content>
+    <Content Include="..\..\resource\sample\Sample3.ts">
+      <Link>resource\sample\Sample3.ts</Link>
+    </Content>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
