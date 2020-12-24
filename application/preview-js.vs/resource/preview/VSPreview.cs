@@ -9,7 +9,7 @@ namespace resource.preview
 {
     internal class VSPreview : cartridge.AnyPreview
     {
-        protected override void _Execute(atom.Trace context, string url)
+        protected override void _Execute(atom.Trace context, string url, int level)
         {
             var a_Context = (new TypeScriptAST(File.ReadAllText(url), url)).RootNode as SourceFile;
             var a_IsFound = GetProperty(NAME.PROPERTY.DEBUGGING_SHOW_PRIVATE) != 0;
@@ -20,104 +20,100 @@ namespace resource.preview
             {
                 context.
                     SetState(NAME.STATE.HEADER).
-                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, 1, "[[Info]]");
+                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, level, "[[Info]]");
                 {
                     context.
                         SetValue(url).
-                        Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, 2, "[[File Name]]");
+                        Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, level + 1, "[[File Name]]");
                     context.
                         SetValue(a_Context.SourceStr.Length.ToString()).
-                        Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, 2, "[[File Size]]");
+                        Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, level + 1, "[[File Size]]");
                     context.
                         SetValue("JavaScript").
-                        Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, 2, "[[Language]]");
+                        Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, level + 1, "[[Language]]");
                 }
             }
             if (a_Context.GetDescendants().OfType<ImportDeclaration>().Any())
             {
                 context.
-                    SetComment(__GetArraySize(a_Context.GetDescendants().OfType<ImportDeclaration>())).
-                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, 1, "[[Imports]]");
+                    SetComment(__GetArraySize(a_Context.GetDescendants().OfType<ImportDeclaration>()), "").
+                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, level, "[[Imports]]");
                 foreach (var a_Context1 in a_Context.GetDescendants().OfType<ImportDeclaration>())
                 {
-                    __Execute(a_Context1, 2, context, url);
+                    __Execute(a_Context1, level + 1, context, url);
                 }
             }
             if (a_Context.GetDescendants().OfType<ExportDeclaration>().Any())
             {
                 context.
-                    SetComment(__GetArraySize(a_Context.GetDescendants().OfType<ExportDeclaration>())).
-                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, 1, "[[Exports]]");
+                    SetComment(__GetArraySize(a_Context.GetDescendants().OfType<ExportDeclaration>()), "").
+                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, level, "[[Exports]]");
                 foreach (var a_Context1 in a_Context.GetDescendants().OfType<ExportDeclaration>())
                 {
-                    __Execute(a_Context1, 2, context, url);
+                    __Execute(a_Context1, level + 1, context, url);
                 }
             }
             if (a_Context.GetDescendants().OfType<ClassDeclaration>().Any())
             {
                 context.
-                    SetComment(__GetArraySize(a_Context.GetDescendants().OfType<ClassDeclaration>())).
-                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, 1, "[[Classes]]");
+                    SetComment(__GetArraySize(a_Context.GetDescendants().OfType<ClassDeclaration>()), "").
+                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, level, "[[Classes]]");
                 foreach (var a_Context1 in a_Context.GetDescendants().OfType<ClassDeclaration>())
                 {
-                    __Execute(a_Context1, 2, context, url, a_IsFound);
+                    __Execute(a_Context1, level + 1, context, url, a_IsFound);
                 }
             }
             if (a_Context.GetDescendants().OfType<InterfaceDeclaration>().Any())
             {
                 context.
-                    SetComment(__GetArraySize(a_Context.GetDescendants().OfType<InterfaceDeclaration>())).
-                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, 1, "[[Interfaces]]");
+                    SetComment(__GetArraySize(a_Context.GetDescendants().OfType<InterfaceDeclaration>()), "").
+                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, level, "[[Interfaces]]");
                 foreach (var a_Context1 in a_Context.GetDescendants().OfType<InterfaceDeclaration>())
                 {
-                    __Execute(a_Context1, 2, context, url, a_IsFound);
+                    __Execute(a_Context1, level + 1, context, url, a_IsFound);
                 }
             }
             if (a_Context.GetDescendants().OfType<EnumDeclaration>().Any())
             {
                 context.
-                    SetComment(__GetArraySize(a_Context.GetDescendants().OfType<EnumDeclaration>())).
-                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, 1, "[[Enums]]");
+                    SetComment(__GetArraySize(a_Context.GetDescendants().OfType<EnumDeclaration>()), "").
+                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, level, "[[Enums]]");
                 foreach (var a_Context1 in a_Context.GetDescendants().OfType<EnumDeclaration>())
                 {
-                    __Execute(a_Context1, 2, context, url, a_IsFound);
+                    __Execute(a_Context1, level + 1, context, url, a_IsFound);
                 }
             }
             if (a_Context.GetDescendants().OfType<FunctionDeclaration>().Any())
             {
                 context.
-                    SetComment(__GetArraySize(a_Context.GetDescendants().OfType<FunctionDeclaration>())).
-                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, 1, "[[Functions]]");
+                    SetComment(__GetArraySize(a_Context.GetDescendants().OfType<FunctionDeclaration>()), "").
+                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, level, "[[Functions]]");
                 foreach (var a_Context1 in a_Context.GetDescendants().OfType<FunctionDeclaration>())
                 {
-                    __Execute(a_Context1, 2, context, url, true, a_IsFound);
+                    __Execute(a_Context1, level + 1, context, url, true, a_IsFound);
                 }
             }
             if (a_Context.Statements.OfType<VariableStatement>().Any())
             {
                 context.
-                    SetComment(__GetArraySize(a_Context.Statements.OfType<VariableStatement>())).
-                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, 1, "[[Variables]]");
+                    SetComment(__GetArraySize(a_Context.Statements.OfType<VariableStatement>()), "").
+                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, level, "[[Variables]]");
                 foreach (var a_Context1 in a_Context.Statements.OfType<VariableStatement>())
                 {
-                    __Execute(a_Context1, 2, context, url, a_IsFound);
+                    __Execute(a_Context1, level + 1, context, url, a_IsFound);
                 }
             }
             if ((a_Context.ParseDiagnostics != null) && a_Context.ParseDiagnostics.Any())
             {
                 context.
+                    SendPreview(NAME.TYPE.ERROR, url).
                     SetState(NAME.STATE.FOOTER).
-                    SetComment(__GetArraySize(a_Context.ParseDiagnostics)).
-                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.ERROR, 1, "[[Diagnostics]]");
+                    SetComment(__GetArraySize(a_Context.ParseDiagnostics), "").
+                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.ERROR, level, "[[Diagnostics]]");
                 foreach (var a_Context2 in a_Context.ParseDiagnostics)
                 {
-                    __Execute(a_Context2, 2, context, url);
+                    __Execute(a_Context2, level + 1, context, url);
                 }
-            }
-            if (GetState() == STATE.CANCEL)
-            {
-                context.
-                    SendWarning(1, NAME.WARNING.TERMINATED);
             }
         }
 
@@ -126,34 +122,31 @@ namespace resource.preview
             if (string.IsNullOrEmpty(node.MessageText?.ToString()) == false)
             {
                 context.
-                    SetState(__GetCategory(node)).
+                    SetUrl(url, "").
                     SetUrlLine(__GetLine(node.File, node.Start)).
                     SetUrlPosition(__GetPosition(node.File, node.Start)).
-                    SetUrl(url).
-                    SetLink((node.Code > 0) ? ("https://www.bing.com/search?q=JavaScript+error+code+" + node.Code.ToString()) : "").
-                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.INFO, level, node.MessageText.ToString() == "localizedDiagnosticMessages" ? "[[Syntax error]]" : node.MessageText.ToString());
+                    SetUrlInfo((node.Code > 0) ? ("https://www.bing.com/search?q=JavaScript+error+code+" + node.Code.ToString()) : "", "").
+                    Send(NAME.SOURCE.PREVIEW, __GetType(node), level, node.MessageText.ToString() == "localizedDiagnosticMessages" ? "[[Syntax error]]" : node.MessageText.ToString());
             }
         }
 
         private static void __Execute(ImportDeclaration node, int level, atom.Trace context, string url)
         {
             context.
-                SetComment("import").
-                SetCommentHint("[[Data type]]").
+                SetComment("import", "[[Data type]]").
+                SetUrl(url, "").
                 SetUrlLine(__GetLine(node, node.Pos.Value)).
                 SetUrlPosition(__GetPosition(node, node.Pos.Value)).
-                SetUrl(url).
                 Send(NAME.SOURCE.PREVIEW, NAME.TYPE.INFO, level, node.GetText());
         }
 
         private static void __Execute(ExportDeclaration node, int level, atom.Trace context, string url)
         {
             context.
-                SetComment("export").
-                SetCommentHint("[[Data type]]").
+                SetComment("export", "[[Data type]]").
+                SetUrl(url, "").
                 SetUrlLine(__GetLine(node, node.Pos.Value)).
                 SetUrlPosition(__GetPosition(node, node.Pos.Value)).
-                SetUrl(url).
                 Send(NAME.SOURCE.PREVIEW, NAME.TYPE.INFO, level, node.GetText());
         }
 
@@ -162,20 +155,18 @@ namespace resource.preview
             if (__IsEnabled(node, isShowPrivate))
             {
                 context.
-                    SetComment(__GetType(node, "enum")).
-                    SetCommentHint("[[Data type]]").
+                    SetComment(__GetType(node, "enum"), "[[Data type]]").
+                    SetUrl(url, "").
                     SetUrlLine(__GetLine(node, node.Name.Pos.Value)).
                     SetUrlPosition(__GetPosition(node, node.Name.Pos.Value)).
-                    SetUrl(url).
                     Send(NAME.SOURCE.PREVIEW, NAME.TYPE.CLASS, level, __GetName(node.Name, true));
                 foreach (var a_Context in node.Members.OfType<EnumMember>())
                 {
                     context.
-                        SetComment("int").
-                        SetCommentHint("[[Data type]]").
+                        SetComment("int", "[[Data type]]").
+                        SetUrl(url, "").
                         SetUrlLine(__GetLine(a_Context, a_Context.Name.Pos.Value)).
                         SetUrlPosition(__GetPosition(a_Context, a_Context.Name.Pos.Value)).
-                        SetUrl(url).
                         Send(NAME.SOURCE.PREVIEW, NAME.TYPE.INFO, level + 1, __GetName(a_Context.Name, false));
                 }
             }
@@ -186,11 +177,10 @@ namespace resource.preview
             if (__IsEnabled(node, isShowPrivate))
             {
                 context.
-                    SetComment(__GetType(node, "class")).
-                    SetCommentHint("[[Data type]]").
+                    SetComment(__GetType(node, "class"), "[[Data type]]").
+                    SetUrl(url, "").
                     SetUrlLine(__GetLine(node, node.Name.Pos.Value)).
                     SetUrlPosition(__GetPosition(node, node.Name.Pos.Value)).
-                    SetUrl(url).
                     Send(NAME.SOURCE.PREVIEW, NAME.TYPE.CLASS, level, __GetName(node.Name, true));
                 foreach (var a_Context in node.Members.OfType<MethodDeclaration>())
                 {
@@ -212,11 +202,10 @@ namespace resource.preview
             if (__IsEnabled(node, isShowPrivate))
             {
                 context.
-                    SetComment(__GetType(node, "interface")).
-                    SetCommentHint("[[Data type]]").
+                    SetComment(__GetType(node, "interface"), "[[Data type]]").
+                    SetUrl(url, "").
                     SetUrlLine(__GetLine(node, node.Name.Pos.Value)).
                     SetUrlPosition(__GetPosition(node, node.Name.Pos.Value)).
-                    SetUrl(url).
                     Send(NAME.SOURCE.PREVIEW, NAME.TYPE.CLASS, level, __GetName(node.Name, true));
                 foreach (var a_Context in node.Members.OfType<MethodSignature>())
                 {
@@ -230,11 +219,10 @@ namespace resource.preview
             if (__IsEnabled(node, isShowPrivate))
             {
                 context.
-                    SetComment(__GetType(node, "function")).
-                    SetCommentHint("[[Function type]]").
+                    SetComment(__GetType(node, "function"), "[[Function type]]").
+                    SetUrl(url, "").
                     SetUrlLine(__GetLine(node, node.Name.Pos.Value)).
                     SetUrlPosition(__GetPosition(node, node.Name.Pos.Value)).
-                    SetUrl(url).
                     Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FUNCTION, level, __GetName(node.Name, isFullName) + __GetParams(node.Parameters));
             }
         }
@@ -244,11 +232,10 @@ namespace resource.preview
             if (__IsEnabled(node, isShowPrivate))
             {
                 context.
-                    SetComment(__GetType(node, "method")).
-                    SetCommentHint("[[Method type]]").
+                    SetComment(__GetType(node, "method"), "[[Method type]]").
+                    SetUrl(url, "").
                     SetUrlLine(__GetLine(node, node.Name.Pos.Value)).
                     SetUrlPosition(__GetPosition(node, node.Name.Pos.Value)).
-                    SetUrl(url).
                     Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FUNCTION, level, __GetName(node.Name, isFullName) + __GetParams(node.Parameters));
             }
         }
@@ -258,11 +245,10 @@ namespace resource.preview
             if (__IsEnabled(node, isShowPrivate))
             {
                 context.
-                    SetComment(__GetType(node, "method")).
-                    SetCommentHint("[[Method type]]").
+                    SetComment(__GetType(node, "method"), "[[Method type]]").
+                    SetUrl(url, "").
                     SetUrlLine(__GetLine(node, node.Name.Pos.Value)).
                     SetUrlPosition(__GetPosition(node, node.Name.Pos.Value)).
-                    SetUrl(url).
                     Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FUNCTION, level, __GetName(node.Name, isFullName) + __GetParams(node.Parameters));
             }
         }
@@ -272,11 +258,10 @@ namespace resource.preview
             if (__IsEnabled(node, isShowPrivate))
             {
                 context.
-                    SetComment(__GetType(node, "property")).
-                    SetCommentHint("[[Data type]]").
+                    SetComment(__GetType(node, "property"), "[[Data type]]").
+                    SetUrl(url, "").
                     SetUrlLine(__GetLine(node, node.Name.Pos.Value)).
                     SetUrlPosition(__GetPosition(node, node.Name.Pos.Value)).
-                    SetUrl(url).
                     SetValue(__GetValue(node.Initializer)).
                     Send(NAME.SOURCE.PREVIEW, NAME.TYPE.PARAMETER, level, node.IdentifierStr);
             }
@@ -287,11 +272,10 @@ namespace resource.preview
             if (__IsEnabled(node, isShowPrivate))
             {
                 context.
-                    SetComment(__GetType(node, "variable")).
-                    SetCommentHint("[[Data type]]").
+                    SetComment(__GetType(node, "variable"), "[[Data type]]").
+                    SetUrl(url, "").
                     SetUrlLine(__GetLine(node, node.Name.Pos.Value)).
                     SetUrlPosition(__GetPosition(node, node.Name.Pos.Value)).
-                    SetUrl(url).
                     SetValue(__GetValue(node.Initializer)).
                     Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, level, node.IdentifierStr);
             }
@@ -305,13 +289,11 @@ namespace resource.preview
                 if (a_Context != null)
                 {
                     context.
-                        SetComment(__GetType(node, "variable")).
-                        SetCommentHint("[[Data type]]").
+                        SetComment(__GetType(node, "variable"), "[[Data type]]").
+                        SetUrl(url, "").
                         SetUrlLine(__GetLine(a_Context, a_Context.Pos.Value)).
                         SetUrlPosition(__GetPosition(a_Context, a_Context.Pos.Value)).
-                        SetUrl(url).
-                        SetValue("...").
-                        Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, level, a_Context.IdentifierStr);
+                        Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, level, a_Context.IdentifierStr, "...");
                 }
             }
         }
@@ -387,7 +369,7 @@ namespace resource.preview
             return "[[Found]]: " + a_Result.ToString();
         }
 
-        private static string __GetCategory(Diagnostic node)
+        private static string __GetType(Diagnostic node)
         {
             switch (node.Category)
             {
