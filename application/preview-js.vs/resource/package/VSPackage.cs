@@ -24,7 +24,7 @@ namespace resource.package
             public const string DESCRIPTION = "Quick preview of JS and TS files";
             public const string GUID = "F88C6B0D-5C05-4400-A035-596ACD6922FA";
             public const string NAME = "Preview-JS";
-            public const string VERSION = "1.0.9";
+            public const string VERSION = "1.0.10";
         }
 
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)

@@ -17,18 +17,18 @@ namespace resource.preview
                 return;
             }
             {
-                context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.HEADER, level, "[[[Info]]]");
+                context.Send(NAME.SOURCE.PREVIEW, NAME.EVENT.HEADER, level, "[[[Info]]]");
                 {
-                    context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.PARAMETER, level + 1, "[[[File Name]]]", url);
-                    context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.PARAMETER, level + 1, "[[[File Size]]]", a_Context.SourceStr.Length.ToString());
-                    context.Send(NAME.SOURCE.PREVIEW, NAME.TYPE.PARAMETER, level + 1, "[[[Language]]]", "JavaScript");
+                    context.Send(NAME.SOURCE.PREVIEW, NAME.EVENT.PARAMETER, level + 1, "[[[File Name]]]", url);
+                    context.Send(NAME.SOURCE.PREVIEW, NAME.EVENT.PARAMETER, level + 1, "[[[File Size]]]", a_Context.SourceStr.Length.ToString());
+                    context.Send(NAME.SOURCE.PREVIEW, NAME.EVENT.PARAMETER, level + 1, "[[[Language]]]", "JavaScript");
                 }
             }
             if (a_Context.GetDescendants().OfType<ImportDeclaration>().Any())
             {
                 context.
                     SetComment(__GetArraySize(a_Context.GetDescendants().OfType<ImportDeclaration>())).
-                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, level, "[[[Imports]]]");
+                    Send(NAME.SOURCE.PREVIEW, NAME.EVENT.FOLDER, level, "[[[Imports]]]");
                 foreach (var a_Context1 in a_Context.GetDescendants().OfType<ImportDeclaration>())
                 {
                     __Execute(context, level + 1, a_Context1, file);
@@ -38,7 +38,7 @@ namespace resource.preview
             {
                 context.
                     SetComment(__GetArraySize(a_Context.GetDescendants().OfType<ExportDeclaration>())).
-                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, level, "[[[Exports]]]");
+                    Send(NAME.SOURCE.PREVIEW, NAME.EVENT.FOLDER, level, "[[[Exports]]]");
                 foreach (var a_Context1 in a_Context.GetDescendants().OfType<ExportDeclaration>())
                 {
                     __Execute(context, level + 1, a_Context1, file);
@@ -48,7 +48,7 @@ namespace resource.preview
             {
                 context.
                     SetComment(__GetArraySize(a_Context.GetDescendants().OfType<ClassDeclaration>())).
-                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, level, "[[[Classes]]]");
+                    Send(NAME.SOURCE.PREVIEW, NAME.EVENT.FOLDER, level, "[[[Classes]]]");
                 foreach (var a_Context1 in a_Context.GetDescendants().OfType<ClassDeclaration>())
                 {
                     __Execute(context, level + 1, a_Context1, file, a_IsFound);
@@ -58,7 +58,7 @@ namespace resource.preview
             {
                 context.
                     SetComment(__GetArraySize(a_Context.GetDescendants().OfType<InterfaceDeclaration>())).
-                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, level, "[[[Interfaces]]]");
+                    Send(NAME.SOURCE.PREVIEW, NAME.EVENT.FOLDER, level, "[[[Interfaces]]]");
                 foreach (var a_Context1 in a_Context.GetDescendants().OfType<InterfaceDeclaration>())
                 {
                     __Execute(context, level + 1, a_Context1, file, a_IsFound);
@@ -68,7 +68,7 @@ namespace resource.preview
             {
                 context.
                     SetComment(__GetArraySize(a_Context.GetDescendants().OfType<EnumDeclaration>())).
-                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, level, "[[[Enums]]]");
+                    Send(NAME.SOURCE.PREVIEW, NAME.EVENT.FOLDER, level, "[[[Enums]]]");
                 foreach (var a_Context1 in a_Context.GetDescendants().OfType<EnumDeclaration>())
                 {
                     __Execute(context, level + 1, a_Context1, file, a_IsFound);
@@ -78,7 +78,7 @@ namespace resource.preview
             {
                 context.
                     SetComment(__GetArraySize(a_Context.GetDescendants().OfType<FunctionDeclaration>())).
-                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, level, "[[[Functions]]]");
+                    Send(NAME.SOURCE.PREVIEW, NAME.EVENT.FOLDER, level, "[[[Functions]]]");
                 foreach (var a_Context1 in a_Context.GetDescendants().OfType<FunctionDeclaration>())
                 {
                     __Execute(context, level + 1, a_Context1, file, true, a_IsFound);
@@ -88,7 +88,7 @@ namespace resource.preview
             {
                 context.
                     SetComment(__GetArraySize(a_Context.Statements.OfType<VariableStatement>())).
-                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FOLDER, level, "[[[Variables]]]");
+                    Send(NAME.SOURCE.PREVIEW, NAME.EVENT.FOLDER, level, "[[[Variables]]]");
                 foreach (var a_Context1 in a_Context.Statements.OfType<VariableStatement>())
                 {
                     __Execute(context, level + 1, a_Context1, file, a_IsFound);
@@ -97,9 +97,9 @@ namespace resource.preview
             if ((a_Context.ParseDiagnostics != null) && a_Context.ParseDiagnostics.Any())
             {
                 context.
-                    SendPreview(NAME.TYPE.ERROR, url).
+                    SendPreview(NAME.EVENT.ERROR, url).
                     SetComment(__GetArraySize(a_Context.ParseDiagnostics)).
-                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.ERROR, level, "[[[Diagnostics]]]");
+                    Send(NAME.SOURCE.PREVIEW, NAME.EVENT.ERROR, level, "[[[Diagnostics]]]");
                 foreach (var a_Context1 in a_Context.ParseDiagnostics)
                 {
                     __Execute(context, level + 1, a_Context1, file);
@@ -114,7 +114,7 @@ namespace resource.preview
                 context.
                     SetUrl(file, __GetLine(data.File, data.Start), __GetPosition(data.File, data.Start)).
                     SetUrlInfo((data.Code > 0) ? ("https://www.bing.com/search?q=JavaScript+error+code+" + data.Code.ToString()) : "").
-                    Send(NAME.SOURCE.PREVIEW, __GetType(data), level, data.MessageText.ToString() == "localizedDiagnosticMessages" ? "[[[Syntax error]]]" : data.MessageText.ToString());
+                    Send(NAME.SOURCE.PREVIEW, __GetType(data), level, data.MessageText.ToString() == "localizedDiagnosticMessages" ? "[[[Syntax error]]]" : __GetText(data.MessageText.ToString()));
             }
         }
 
@@ -123,7 +123,7 @@ namespace resource.preview
             context.
                 SetComment("import", "[[[Data Type]]]").
                 SetUrl(file, __GetLine(data, data.Pos.Value), __GetPosition(data, data.Pos.Value)).
-                Send(NAME.SOURCE.PREVIEW, NAME.TYPE.PARAMETER, level, data.GetText());
+                Send(NAME.SOURCE.PREVIEW, NAME.EVENT.PARAMETER, level, __GetText(data.GetText()));
         }
 
         private static void __Execute(atom.Trace context, int level, ExportDeclaration data, string file)
@@ -131,7 +131,7 @@ namespace resource.preview
             context.
                 SetComment("export", "[[[Data Type]]]").
                 SetUrl(file, __GetLine(data, data.Pos.Value), __GetPosition(data, data.Pos.Value)).
-                Send(NAME.SOURCE.PREVIEW, NAME.TYPE.PARAMETER, level, data.GetText());
+                Send(NAME.SOURCE.PREVIEW, NAME.EVENT.PARAMETER, level, __GetText(data.GetText()));
         }
 
         private static void __Execute(atom.Trace context, int level, EnumDeclaration data, string file, bool isShowPrivate)
@@ -141,13 +141,13 @@ namespace resource.preview
                 context.
                     SetComment(__GetType(data, "enum"), "[[[Data Type]]]").
                     SetUrl(file, __GetLine(data, data.Name.Pos.Value), __GetPosition(data, data.Name.Pos.Value)).
-                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.CLASS, level, __GetName(data.Name, true));
+                    Send(NAME.SOURCE.PREVIEW, NAME.EVENT.CLASS, level, __GetName(data.Name, true));
                 foreach (var a_Context in data.Members.OfType<EnumMember>())
                 {
                     context.
                         SetComment("int", "[[[Data Type]]]").
                         SetUrl(file, __GetLine(a_Context, a_Context.Name.Pos.Value), __GetPosition(a_Context, a_Context.Name.Pos.Value)).
-                        Send(NAME.SOURCE.PREVIEW, NAME.TYPE.PARAMETER, level + 1, __GetName(a_Context.Name, false));
+                        Send(NAME.SOURCE.PREVIEW, NAME.EVENT.PARAMETER, level + 1, __GetName(a_Context.Name, false));
                 }
             }
         }
@@ -159,7 +159,7 @@ namespace resource.preview
                 context.
                     SetComment(__GetType(data, "class"), "[[[Data Type]]]").
                     SetUrl(file, __GetLine(data, data.Name.Pos.Value), __GetPosition(data, data.Name.Pos.Value)).
-                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.CLASS, level, __GetName(data.Name, true));
+                    Send(NAME.SOURCE.PREVIEW, NAME.EVENT.CLASS, level, __GetName(data.Name, true));
                 foreach (var a_Context in data.Members.OfType<MethodDeclaration>())
                 {
                     __Execute(context, level + 1, a_Context, file, false, isShowPrivate);
@@ -182,7 +182,7 @@ namespace resource.preview
                 context.
                     SetComment(__GetType(data, "interface"), "[[[Data Type]]]").
                     SetUrl(file, __GetLine(data, data.Name.Pos.Value), __GetPosition(data, data.Name.Pos.Value)).
-                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.CLASS, level, __GetName(data.Name, true));
+                    Send(NAME.SOURCE.PREVIEW, NAME.EVENT.CLASS, level, __GetName(data.Name, true));
                 foreach (var a_Context in data.Members.OfType<MethodSignature>())
                 {
                     __Execute(context, level + 1, a_Context, file, false, isShowPrivate);
@@ -197,7 +197,7 @@ namespace resource.preview
                 context.
                     SetComment(__GetType(data, "function"), "[[[Function Type]]]").
                     SetUrl(file, __GetLine(data, data.Name.Pos.Value), __GetPosition(data, data.Name.Pos.Value)).
-                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FUNCTION, level, __GetName(data.Name, isFullName) + __GetParams(data.Parameters));
+                    Send(NAME.SOURCE.PREVIEW, NAME.EVENT.FUNCTION, level, __GetName(data.Name, isFullName) + __GetParams(data.Parameters));
             }
         }
 
@@ -208,7 +208,7 @@ namespace resource.preview
                 context.
                     SetComment(__GetType(data, "method"), "[[[Method Type]]]").
                     SetUrl(file, __GetLine(data, data.Name.Pos.Value), __GetPosition(data, data.Name.Pos.Value)).
-                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FUNCTION, level, __GetName(data.Name, isFullName) + __GetParams(data.Parameters));
+                    Send(NAME.SOURCE.PREVIEW, NAME.EVENT.FUNCTION, level, __GetName(data.Name, isFullName) + __GetParams(data.Parameters));
             }
         }
 
@@ -219,7 +219,7 @@ namespace resource.preview
                 context.
                     SetComment(__GetType(data, "method"), "[[[Method Type]]]").
                     SetUrl(file, __GetLine(data, data.Name.Pos.Value), __GetPosition(data, data.Name.Pos.Value)).
-                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.FUNCTION, level, __GetName(data.Name, isFullName) + __GetParams(data.Parameters));
+                    Send(NAME.SOURCE.PREVIEW, NAME.EVENT.FUNCTION, level, __GetName(data.Name, isFullName) + __GetParams(data.Parameters));
             }
         }
 
@@ -231,7 +231,7 @@ namespace resource.preview
                     SetComment(__GetType(data, "property"), "[[[Data Type]]]").
                     SetUrl(file, __GetLine(data, data.Name.Pos.Value), __GetPosition(data, data.Name.Pos.Value)).
                     SetValue(__GetValue(data.Initializer)).
-                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.PARAMETER, level, data.IdentifierStr);
+                    Send(NAME.SOURCE.PREVIEW, NAME.EVENT.PARAMETER, level, __GetText(data.IdentifierStr));
             }
         }
 
@@ -243,7 +243,7 @@ namespace resource.preview
                     SetComment(__GetType(data, "variable"), "[[[Data Type]]]").
                     SetUrl(file, __GetLine(data, data.Name.Pos.Value), __GetPosition(data, data.Name.Pos.Value)).
                     SetValue(__GetValue(data.Initializer)).
-                    Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, level, data.IdentifierStr);
+                    Send(NAME.SOURCE.PREVIEW, NAME.EVENT.VARIABLE, level, __GetText(data.IdentifierStr));
             }
         }
 
@@ -257,7 +257,7 @@ namespace resource.preview
                     context.
                         SetComment(__GetType(data, "variable"), "[[[Data Type]]]").
                         SetUrl(file, __GetLine(a_Context, a_Context.Pos.Value), __GetPosition(a_Context, a_Context.Pos.Value)).
-                        Send(NAME.SOURCE.PREVIEW, NAME.TYPE.VARIABLE, level, a_Context.IdentifierStr, "...");
+                        Send(NAME.SOURCE.PREVIEW, NAME.EVENT.VARIABLE, level, __GetText(a_Context.IdentifierStr), "...");
                 }
             }
         }
@@ -333,14 +333,36 @@ namespace resource.preview
             return "[[[Found]]]: " + a_Result.ToString();
         }
 
+        private static string __GetText(string value)
+        {
+            var a_Result = (value != null) ? value.Trim() : "";
+            if (a_Result.Contains("\t"))
+            {
+                a_Result = a_Result.Replace("\t", " ");
+            }
+            if (a_Result.Contains("\r"))
+            {
+                a_Result = a_Result.Replace("\r", " ");
+            }
+            if (a_Result.Contains("\n"))
+            {
+                a_Result = a_Result.Replace("\n", " ");
+            }
+            while (a_Result.Contains("  "))
+            {
+                a_Result = a_Result.Replace("  ", " ");
+            }
+            return a_Result;
+        }
+
         private static string __GetType(Diagnostic data)
         {
             switch (data.Category)
             {
-                case DiagnosticCategory.Message: return NAME.TYPE.PARAMETER;
-                case DiagnosticCategory.Error: return NAME.TYPE.ERROR;
+                case DiagnosticCategory.Message: return NAME.EVENT.PARAMETER;
+                case DiagnosticCategory.Error: return NAME.EVENT.ERROR;
             }
-            return NAME.TYPE.WARNING;
+            return NAME.EVENT.WARNING;
         }
 
         private static string __GetName(INode data)
