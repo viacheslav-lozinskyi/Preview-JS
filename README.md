@@ -8,16 +8,19 @@
 
 ---
 
+## Important information:
 [![MetaOutput](https://www.metaoutput.net/_functions/watch?utm_source=github.com&utm_medium=referral&utm_campaign=view-on-github&utm_content=Preview-JS&source=GITHUB&size=128x128&project=Preview-JS&url=https://github.com/viacheslav-lozinskyi/Preview-JS)](https://www.metaoutput.net/)
 
-### This extension is working only with installed [MetaOutput](https://www.metaoutput.net/) extension!
+This extension is working only with installed [MetaOutput](https://www.metaoutput.net/) extension!
 
 ---
 
-### Now you can look inside [JS](https://en.wikipedia.org/wiki/JavaScript) and [TS](https://en.wikipedia.org/wiki/TypeScript) source files not opening it.
+## Description:
+Now you can look inside [JS](https://en.wikipedia.org/wiki/JavaScript) and [TS](https://en.wikipedia.org/wiki/TypeScript) source files not opening it.
 
 ---
 
+## How it works:
 ![Image](https://viacheslav-lozinskyi.github.io/Preview-JS/resource/video/Presentation1.gif)
 
 ---
