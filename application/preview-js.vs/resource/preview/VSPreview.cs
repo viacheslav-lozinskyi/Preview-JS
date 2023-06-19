@@ -265,7 +265,7 @@ namespace resource.preview
 
         private static bool __IsEnabled(Node data, bool isShowPrivate)
         {
-            if (GetState() == NAME.STATE.CANCEL)
+            if (GetState() == NAME.STATE.WORK.CANCEL)
             {
                 return false;
             }
